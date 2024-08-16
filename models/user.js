@@ -2,29 +2,35 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 const RoleSchema = new Schema({
-  roleName: {
-    type: String,
-    enum: ['Super Admin', 'Admin', 'User', 'Guest'],
-    required: true,
-    default: 'Admin'
-  },
-  value: {
+  role: {
     type: String,
     enum: ['super', 'admin', 'user', 'guest'],
     required: true,
-    default: 'admin'
+    default: 'Admin'
   }
 });
 
-const userSchema = ({
-  name: {
+
+
+const userSchema = new Schema({
+  firstName: {
     type: String,
-    required: true
+    required: true,
   },
 
+  lastName: {
+    type: String,
+    required: true,
+  },
+  
   email: {
     type: String,
-    required: true
+    required: true,
+  },
+
+  phone: {
+    type: String,
+    required: true,
   },
 
   password: {
@@ -33,9 +39,10 @@ const userSchema = ({
   },
 
   status: {
-    type: String,
+    type: Number,
+    enum: [0, 1],
     required: true,
-    default: 'I am status'
+    default: 0
   },
 
   tokenVersion: {
@@ -45,11 +52,23 @@ const userSchema = ({
   
   roles: {
     type: [RoleSchema],
-    default: [{
-      roleName: 'Admin',
-      value: 'admin'
-    }]
+    default: [{ role: 'admin'}]
+  },
+
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+
+  lastLoginAt: {
+    type: Date,
+    default: Date.now
   }
 });
+
+userSchema.methods.updateLastLogin = function () {
+  this.lastLoginAt = new Date();
+  return this.save();
+}
 
 module.exports = mongoose.model('User', userSchema);

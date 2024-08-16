@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 
 const authRoutes = require('./routes/auth');
 const menuRoutes = require('./routes/menu');
+const userRoutes = require('./routes/user')
 const errorMiddleware = require('./middleware/errorMiddleware');
 const { PORT, MONGO_USER, MONGO_PASSWORD, MONGO_DEFAULT_DB } = require('./config/default');
 
@@ -23,7 +24,8 @@ app.use((req, res, next) => {
 
 
 app.use('/auth', authRoutes);
-app.use('/menu', menuRoutes)
+app.use('/menu', menuRoutes);
+app.use('/user', userRoutes);
 app.use(errorMiddleware);
 
 mongoose

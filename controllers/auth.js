@@ -1,5 +1,3 @@
-
-const { validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 // const nodemailer = require('nodemailer');
 // const Mailjet = require('nodemailer-mailjet-transport');
@@ -20,19 +18,17 @@ const { generateToken, generateVerificationToken, tokenStore } = require('../ser
 // const transporter = nodemailer.createTransport(mailjetTransport);
 
 exports.signup = async (req, res, next) => { 
-  const errors = validationResult(req);
+  // const errors = validationResult(req);
 
-  if(!errors.isEmpty()) {
-    const error = new Error('Validation failed');
-    error.status = 422;
-    throw error;
-  }
-
+  // if(!errors.isEmpty()) {
+  //   const error = new Error('Validation failed');
+  //   error.status = 422;
+  //   throw error;
+  // }
+  const { email, firstName, lastName, phone } = req.body;
   const uuid = uuidv4();
-
-  const email = req.body.email;
   const password = uuid.replace(/-/g, '').substring(0, 10);
-  const name = req.body.name;
+  console.log(password)
   try {
     const findUserExist = await User.findOne({ email: email });
     if(findUserExist) {
@@ -46,10 +42,10 @@ exports.signup = async (req, res, next) => {
       fromEmail: 'bootrancntt@gmail.com', // Your email address
       fromName: 'Manh Tri', // Your name or your company name
       toEmail: email, // Recipient's email address (the user who registered)
-      toName: name, // Recipient's name (the user who registered)
+      toName: firstName + ' ' + lastName, // Recipient's name (the user who registered)
       subject: 'Registration Successful', // Subject of the email
-      text: `Hello ${name},\n\nYour account has been successfully registered. Welcome to our service! We are excited to have you on board.\n\nBest regards,\nManh Tri`, // Plain text version of the email
-      html: `<h3>Hello ${name},</h3>
+      text: `Hello ${firstName + ' ' + lastName},\n\nYour account has been successfully registered. Welcome to our service! We are excited to have you on board.\n\nBest regards,\nManh Tri`, // Plain text version of the email
+      html: `<h3>Hello ${firstName + ' ' + lastName},</h3>
             <p>Your account has been successfully registered. Here is your password: <strong>${password}</strong></p>
              <p>Best regards,<br>Manh Tri</p>` // HTML version of the email
     };
@@ -60,8 +56,9 @@ exports.signup = async (req, res, next) => {
       const user = new User({
         email: email,
         password: hashedPw,
-        name: name,
-        status: 'ok'
+        firstName: firstName,
+        lastName: lastName,
+        phone: phone,
       });
       await user.save();
 
@@ -109,6 +106,8 @@ exports.login = async (req, res, next) => {
     }
 
     const token = generateToken(user);
+
+    await user.updateLastLogin();
 
     res.status(200).json({
       status: 200,

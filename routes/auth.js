@@ -2,14 +2,16 @@ const express = require('express');
 const isAuth = require('../middleware/is-auth');
 
 const { validateEmail, validatePassword } = require('../validators/commonValidators');
+const validateLogin = require('../validators/loginValidations');
+const validateSignup = require('../validators/signupValidators');
 const handleValidationErrors = require('../middleware/validationErrorMiddleware');
 const authController = require('../controllers/auth');
 
 const router = express.Router();
 
-router.put('/signup', [ validateEmail(), handleValidationErrors ] ,authController.signup);
+router.put('/signup', [ validateSignup(), handleValidationErrors ] ,authController.signup);
 
-router.post('/login', [ validateEmail(), validatePassword(), handleValidationErrors ], authController.login);
+router.post('/login', [ validateLogin(), handleValidationErrors ], authController.login);
 
 router.get('/user-info', isAuth, authController.getUserInfo);
 

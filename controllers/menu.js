@@ -35,7 +35,7 @@ exports.getMenu = async (req, res, next) => {
             {
               "path": "/admin-user/list",
               "name": "ListUser",
-              "component": "/admin-user/index",
+              "component": "/adminUser/index",
               "meta": {
                 "icon": "ep:list",
                 "title": "List User",
@@ -121,7 +121,7 @@ exports.getMenu = async (req, res, next) => {
             {
               "path": "/components/table",
               "name": "Table",
-              "component": "/table/Basic",
+              "component": "/components/table/index",
               "meta": { 
                 "icon": "ant-design:table-outlined",
                 "title": "Table",
@@ -135,7 +135,7 @@ exports.getMenu = async (req, res, next) => {
                 {
                   "path": "/components/table",
                   "name": "Table",
-                  "component": "/table/Basic",
+                  "component": "/components/table/index",
                   "meta": { 
                     "icon": "tdesign:table-add",
                     "title": "Table Basic",
@@ -147,9 +147,9 @@ exports.getMenu = async (req, res, next) => {
                   },
                 },
                 {
-                  "path": "/table/expandTable",
-                  "name": "ExpandTable",
-                  "component": "/table/ExpandTable",
+                  "path": "/table/useTableDemo",
+                  "name": "UseTableDemo",
+                  "component": "/components/table/useTableDemo",
                   "meta": { 
                     "icon": "mdi:table-minus",
                     "title": "Expand Table",
@@ -160,48 +160,48 @@ exports.getMenu = async (req, res, next) => {
                     "isKeepAlive": true
                   }
                 },
-                {
-                  "path": "/table/searchTable",
-                  "name": "SearchTable",
-                  "component": "/table/SearchTable",
-                  "meta": { 
-                    "icon": "teenyicons:table-solid",
-                    "title": "Search Table",
-                    "isLink": "",
-                    "isHide": false,
-                    "isFull": false,
-                    "isAffix": false,
-                    "isKeepAlive": true
-                  }
-                },
-                {
-                  "path": "/table/multipleHeader",
-                  "name": "MultipleHeader",
-                  "component": "/table/MultipleHeader",
-                  "meta": { 
-                    "icon": "majesticons:table",
-                    "title": "Multiple Header",
-                    "isLink": "",
-                    "isHide": false,
-                    "isFull": false,
-                    "isAffix": false,
-                    "isKeepAlive": true
-                  }
-                },
-                {
-                  "path": "/table/multipleData",
-                  "name": "MultipleData",
-                  "component": "/table/TableMultipleData",
-                  "meta": { 
-                    "icon": "bx:data",
-                    "title": "Multiple Data",
-                    "isLink": "",
-                    "isHide": false,
-                    "isFull": false,
-                    "isAffix": false,
-                    "isKeepAlive": true
-                  }
-                }
+                // {
+                //   "path": "/table/searchTable",
+                //   "name": "SearchTable",
+                //   "component": "/table/SearchTable",
+                //   "meta": { 
+                //     "icon": "teenyicons:table-solid",
+                //     "title": "Search Table",
+                //     "isLink": "",
+                //     "isHide": false,
+                //     "isFull": false,
+                //     "isAffix": false,
+                //     "isKeepAlive": true
+                //   }
+                // },
+                // {
+                //   "path": "/table/multipleHeader",
+                //   "name": "MultipleHeader",
+                //   "component": "/table/MultipleHeader",
+                //   "meta": { 
+                //     "icon": "majesticons:table",
+                //     "title": "Multiple Header",
+                //     "isLink": "",
+                //     "isHide": false,
+                //     "isFull": false,
+                //     "isAffix": false,
+                //     "isKeepAlive": true
+                //   }
+                // },
+                // {
+                //   "path": "/table/multipleData",
+                //   "name": "MultipleData",
+                //   "component": "/table/TableMultipleData",
+                //   "meta": { 
+                //     "icon": "bx:data",
+                //     "title": "Multiple Data",
+                //     "isLink": "",
+                //     "isHide": false,
+                //     "isFull": false,
+                //     "isAffix": false,
+                //     "isKeepAlive": true
+                //   }
+                // }
               ]
             },
             {
