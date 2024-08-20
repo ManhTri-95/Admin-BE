@@ -38,6 +38,11 @@ const userSchema = new Schema({
     required: true
   },
 
+  position: {
+    type: String,
+    required: false
+  },
+
   status: {
     type: Number,
     enum: [0, 1],

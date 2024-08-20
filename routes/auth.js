@@ -5,6 +5,7 @@ const { validateEmail, validatePassword } = require('../validators/commonValidat
 const validateLogin = require('../validators/loginValidations');
 const validateSignup = require('../validators/signupValidators');
 const handleValidationErrors = require('../middleware/validationErrorMiddleware');
+const validateChangePassword = require('../validators/changePasswordValidators');
 const authController = require('../controllers/auth');
 
 const router = express.Router();
@@ -20,5 +21,7 @@ router.get('/logout', isAuth, authController.logout);
 router.post('/verify-token', authController.verifyToken);
 
 router.post('/reset-password', [ validateEmail(), handleValidationErrors ], authController.resetPassword);
+
+router.post('/change-password', isAuth, [ validateChangePassword(), handleValidationErrors ], authController.changePassword)
 
 module.exports = router;

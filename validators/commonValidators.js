@@ -14,4 +14,5 @@ const validatePassword = () => {
     .matches(REGEXP_PWD).withMessage('Password must be between 8 to 18 characters and include at least one lowercase letter, one uppercase letter, one number, and one special character.')
 }
 
-module.exports = { validateEmail, validatePassword }
+
+module.exports = { validateEmail, validatePassword, REGEXP_PWD }

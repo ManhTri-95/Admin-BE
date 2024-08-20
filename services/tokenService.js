@@ -8,7 +8,7 @@ const tokenStore = {};
 
 const generateToken = (user) => { 
   const payload = {  userId: user._id.toString(), tokenVersion: user.tokenVersion };
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: '1h'})
+  return jwt.sign(payload, JWT_SECRET, { expiresIn: '1d'})
 }
 
 const generateVerificationToken = (email) => {

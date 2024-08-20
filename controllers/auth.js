@@ -59,6 +59,7 @@ exports.signup = async (req, res, next) => {
         firstName: firstName,
         lastName: lastName,
         phone: phone,
+        position: '',
       });
       await user.save();
 
@@ -153,8 +154,8 @@ exports.logout = async (req, res, next) => {
   try {
     const user = await User.findById(req.userId);
     if (!user) {
-      const error = new Error('Not authenticated');
-      error.statusCode = 401;
+      const error = new Error('This user does not exist');
+      error.statusCode = 404;
       throw error;
     }
 
@@ -240,6 +241,33 @@ exports.resetPassword = async (req, res, next) => {
         message: 'Reset password success!',
       });
     }
+
+  } catch (error) {
+    if(!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+}
+
+exports.changePassword = async (req, res, next) => {
+  try { 
+    const { newPassword } = req.body;
+    const user = await User.findById(req.userId);
+    if (!user) {
+      const error = new Error('This user does not exist');
+      error.statusCode = 404;
+      throw error;
+    }
+
+    const hashedNewPw = await bcrypt.hash(newPassword, 12);
+    user.password = hashedNewPw;
+    await user.save();
+
+    res.status(200).json({
+      status: 200,
+      message: 'Change password success'
+    });
 
   } catch (error) {
     if(!error.statusCode) {

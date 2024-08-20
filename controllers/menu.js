@@ -152,7 +152,7 @@ exports.getMenu = async (req, res, next) => {
                   "component": "/components/table/useTableDemo",
                   "meta": { 
                     "icon": "mdi:table-minus",
-                    "title": "Expand Table",
+                    "title": "UseTable",
                     "isLink": "",
                     "isHide": false,
                     "isFull": false,
