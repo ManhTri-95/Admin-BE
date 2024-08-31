@@ -20,8 +20,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(bodyParser.json());// application/json
 
+const allowedOrigins = ['https://localhost:3100', 'https://matches-taupe.vercel.app'];
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', 'https://localhost:3100,https://matches-taupe.vercel.app/'),
+  const origin = req.headers.origin;
+
+  // Check if the request origin is in the list of allowed origins
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin); // Set the allowed origin dynamically
+  }
+  //res.setHeader('Access-Control-Allow-Origin', 'https://localhost:3100,https://matches-taupe.vercel.app'),
   res.setHeader('Access-Control-Allow-Credentials', 'true'),
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTION');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
