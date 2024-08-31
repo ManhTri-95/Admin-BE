@@ -1,16 +1,22 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
+const path = require('path');
 
 const bodyParser = require('body-parser');
 
 const authRoutes = require('./routes/auth');
 const menuRoutes = require('./routes/menu');
 const userRoutes = require('./routes/user')
+const uploadRoutes = require('./routes/uploads/uploadRoutes');
 const errorMiddleware = require('./middleware/errorMiddleware');
+
 const { PORT, MONGO_USER, MONGO_PASSWORD, MONGO_DEFAULT_DB } = require('./config/default');
 
+
 const app = express();
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(bodyParser.json());// application/json
 
@@ -23,9 +29,11 @@ app.use((req, res, next) => {
 });
 
 
+
 app.use('/auth', authRoutes);
 app.use('/menu', menuRoutes);
 app.use('/user', userRoutes);
+app.use('/uploads', uploadRoutes);
 app.use(errorMiddleware);
 
 mongoose

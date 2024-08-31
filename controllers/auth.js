@@ -216,6 +216,7 @@ exports.resetPassword = async (req, res, next) => {
     }
 
     const newPassword = uuid.replace(/-/g, '').substring(0, 10);
+    console.log(newPassword);
     const emailDetails = {
       fromEmail: 'bootrancntt@gmail.com',
       fromName: 'Manh Tri',
@@ -229,7 +230,6 @@ exports.resetPassword = async (req, res, next) => {
     };
     
     const emailResponse = await sendEmail(emailDetails);
-    console.log(emailResponse)
     if (emailResponse) {
       const hashedPw = await bcrypt.hash(newPassword, 12);
 

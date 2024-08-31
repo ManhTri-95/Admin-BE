@@ -10,9 +10,11 @@ const RoleSchema = new Schema({
   }
 });
 
-
-
 const userSchema = new Schema({
+  avatar: {
+    type: String,
+    required: false,
+  },
   firstName: {
     type: String,
     required: true,

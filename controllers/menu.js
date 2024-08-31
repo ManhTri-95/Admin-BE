@@ -47,6 +47,20 @@ exports.getMenu = async (req, res, next) => {
               }
             },
             {
+              "path": "/admin-user/add",
+              "name": "AddUser",
+              "component": "/adminUser/addUser",
+              "meta": {
+                "icon": "ep:list",
+                "title": "Add User",
+                "isLink": "",
+                "isHide": true,
+                "isFull": false,
+                "isAffix": false,
+                "isKeepAlive": true
+              }
+            },
+            {
               "path": "/admin-user/detail/:id",
               "name": "detailAdminUser",
               "component": "/admin-user/UserDetail/index",
@@ -60,6 +74,20 @@ exports.getMenu = async (req, res, next) => {
                 "isKeepAlive": true
               }
             },
+            {
+              "path": "/admin-user/edit/:id",
+              "name": "editAdminUser",
+              "component": "/adminUser/addUser",
+              "meta": {
+                "icon": "ep:list",
+                "title": "Edit User",
+                "isLink": "",
+                "isHide": true,
+                "isFull": false,
+                "isAffix": false,
+                "isKeepAlive": true
+              }
+            }
           ]
         },
         {
