@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 
 const authRoutes = require('./routes/auth');
 const menuRoutes = require('./routes/menu');
-const userRoutes = require('./routes/user')
+const userRoutes = require('./routes/user');
 const uploadRoutes = require('./routes/uploads/uploadRoutes');
 const errorMiddleware = require('./middleware/errorMiddleware');
 
@@ -48,6 +48,6 @@ mongoose
     `mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@cluster0.tei1gv0.mongodb.net/${MONGO_DEFAULT_DB}?retryWrites=true&w=majority&appName=Cluster0`
   )
   .then(result => {
-    app.listen(PORT)
+    app.listen(PORT);
   })
   .catch(err => console.log(err));

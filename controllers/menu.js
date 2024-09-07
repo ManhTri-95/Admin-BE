@@ -19,6 +19,51 @@ exports.getMenu = async (req, res, next) => {
           }
         },
         {
+          "path": "/system",
+          "name": "SystemManagement",
+          "redirect": "/menu/list",
+          "meta": {
+            "icon": "ep:setting",
+            "title": "System Management",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          },
+          "children": [ 
+           {
+            "path": "/menu/list",
+            "name": "Menu",
+            "component": "/menu/index",
+            "meta": { 
+              "icon": "ep:menu",
+              "title": "Menu Management",
+              "isLink": "",
+              "isHide": false,
+              "isFull": true,
+              "isAffix": false,
+              "isKeepAlive": true
+            }
+           },
+           {
+            "path": "/menu/add",
+            "name": "Add menu",
+            "component": "/menu/add",
+            "meta": { 
+              "icon": "ep:menu",
+              "title": "Add Menu Management",
+              "isLink": "",
+              "isHide": true,
+              "isFull": false,
+              "isAffix": false,
+              "isKeepAlive": true
+            }
+           }
+          ]
+        },
+
+        {
           "path": "/admin-user",
           "name": "AdminUser",
           "redirect": "/admin-user/list",
@@ -107,7 +152,7 @@ exports.getMenu = async (req, res, next) => {
         {
           "path": "/components",
           "name": "components",
-          "redirect": "/components/card-list",
+          "redirect": "/components/button",
           "meta": {
             "icon": "ep:postcard",
             "title": "Components",
@@ -118,20 +163,6 @@ exports.getMenu = async (req, res, next) => {
             "isKeepAlive": true
           },
           "children": [
-            {
-              "path": "/components/card-list",
-              "name": "CardList",
-              "component": "/components/card-list/index",
-              "meta": {
-                "icon": "ep:list",
-                "title": "Card List",
-                "isLink": "",
-                "isHide": false,
-                "isFull": false,
-                "isAffix": false,
-                "isKeepAlive": true
-              }
-            },
             {
               "path": "/components/button",
               "name": "Button",
@@ -161,8 +192,8 @@ exports.getMenu = async (req, res, next) => {
               },
               "children": [
                 {
-                  "path": "/components/table",
-                  "name": "Table",
+                  "path": "/components/table-basic",
+                  "name": "Table Basic",
                   "component": "/components/table/index",
                   "meta": { 
                     "icon": "tdesign:table-add",
@@ -188,48 +219,6 @@ exports.getMenu = async (req, res, next) => {
                     "isKeepAlive": true
                   }
                 },
-                // {
-                //   "path": "/table/searchTable",
-                //   "name": "SearchTable",
-                //   "component": "/table/SearchTable",
-                //   "meta": { 
-                //     "icon": "teenyicons:table-solid",
-                //     "title": "Search Table",
-                //     "isLink": "",
-                //     "isHide": false,
-                //     "isFull": false,
-                //     "isAffix": false,
-                //     "isKeepAlive": true
-                //   }
-                // },
-                // {
-                //   "path": "/table/multipleHeader",
-                //   "name": "MultipleHeader",
-                //   "component": "/table/MultipleHeader",
-                //   "meta": { 
-                //     "icon": "majesticons:table",
-                //     "title": "Multiple Header",
-                //     "isLink": "",
-                //     "isHide": false,
-                //     "isFull": false,
-                //     "isAffix": false,
-                //     "isKeepAlive": true
-                //   }
-                // },
-                // {
-                //   "path": "/table/multipleData",
-                //   "name": "MultipleData",
-                //   "component": "/table/TableMultipleData",
-                //   "meta": { 
-                //     "icon": "bx:data",
-                //     "title": "Multiple Data",
-                //     "isLink": "",
-                //     "isHide": false,
-                //     "isFull": false,
-                //     "isAffix": false,
-                //     "isKeepAlive": true
-                //   }
-                // }
               ]
             },
             {
