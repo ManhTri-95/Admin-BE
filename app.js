@@ -11,6 +11,8 @@ const userRoutes = require('./routes/user');
 const uploadRoutes = require('./routes/uploads/uploadRoutes');
 const errorMiddleware = require('./middleware/errorMiddleware');
 
+const Menu = require('./models/menu');
+
 const { PORT, MONGO_USER, MONGO_PASSWORD, MONGO_DEFAULT_DB } = require('./config/default');
 
 
@@ -51,3 +53,19 @@ mongoose
     app.listen(PORT);
   })
   .catch(err => console.log(err));
+
+  // async function listAllDocuments() {
+  //   try {
+  //     const result = await Menu.updateMany(
+  //       {}, // Tìm tất cả tài liệu
+  //       { $set: { 'meta.isAffix': false } } // Đặt giá trị mặc định cho isKeepAlive trong meta
+  //     );
+  //   } catch (err) {
+  //     console.error('Error fetching documents:', err);
+  //   }
+  // }
+  
+
+  
+
+  
