@@ -49,7 +49,7 @@ exports.postAddMenu = async (req, res, next) => {
       meta: {
         icon: icon,
         title: title, 
-        isLink: isLink,
+        isLink: isLink || "",
         isHide: isHide,
         isFull: isFull,
       }
@@ -162,7 +162,7 @@ exports.getMenuItemDetail = async (req, res, next) => {
 
 exports.putEditMenu = async (req, res, next) => {
   const { id, type, parentId, title, component, name, icon, path, isLink, isHide, isFull }= req.body;
-
+  console.log(req.body)
   try {
     const menu = await Menu.findById(id);
     if(!menu) {
@@ -182,7 +182,6 @@ exports.putEditMenu = async (req, res, next) => {
     menu.meta.title = title;
     menu.meta.isLink = isLink;
     menu.meta.isHide = isHide;
-    menu.meta.isLink = isFull;
 
     await menu.save();
 
