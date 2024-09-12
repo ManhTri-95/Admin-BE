@@ -90,7 +90,7 @@ exports.postDeleteUser = async (req, res, next) => {
     const result = await User.deleteMany({ _id: { $in: objectIdArray } });
 
     if (result.deletedCount === 0) {
-      const error = new Error('No users found to delete');
+      const error = new Error('No Menu found to delete');
       error.statusCode = 404;
       throw error;
     }
@@ -136,7 +136,7 @@ exports.postAddUser = async (req, res, next) => {
     if(!error.statusCode) {
       error.statusCode = 500;
     }
-    next(error);
+    next(error);tri95
   }
 }
 
