@@ -182,6 +182,7 @@ exports.putEditMenu = async (req, res, next) => {
     menu.meta.title = title;
     menu.meta.isLink = isLink;
     menu.meta.isHide = isHide;
+    menu.meta.isFull = isFull;
 
     await menu.save();
 
