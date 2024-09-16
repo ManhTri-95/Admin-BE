@@ -28,7 +28,7 @@ exports.signup = async (req, res, next) => {
   const { email, firstName, lastName, phone } = req.body;
   const uuid = uuidv4();
   const password = uuid.replace(/-/g, '').substring(0, 10);
-  console.log(password)
+ 
   try {
     const findUserExist = await User.findOne({ email: email });
     if(findUserExist) {
@@ -129,7 +129,9 @@ exports.login = async (req, res, next) => {
 
 exports.getUserInfo = async (req, res, next) => {
   try {
-    const user = await User.findById(req.userId);
+    const user = await User.findById(req.userId)
+      .select('avatar firstName lastName email phone position status role')
+      .populate('role', 'name');
 
     if(!user) {
       const error = new Error('Cannot find profile information');

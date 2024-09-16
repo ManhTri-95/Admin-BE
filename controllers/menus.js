@@ -1,14 +1,17 @@
 const mongoose = require('mongoose');
 
 const Menu = require('../models/menu');
+const User = require('../models/user');
+const Role = require('../models/roles');
+
 const { createResponse } = require('../utils/responseHelper');
 
-const getMenuRecursive = async (menuId) => {
+const getMenuRecursive = async (menuId, roleMenu) => {
   const menu = await Menu.findById(menuId).exec();
   
   if (!menu) return null;
 
-  const children = await Promise.all(menu.children.map(childId => getMenuRecursive(childId)));
+  const children = await Promise.all(menu.children.map(childId => getMenuRecursive(childId, roleMenu)));
   
   return {
     ...menu.toObject(),
@@ -16,11 +19,38 @@ const getMenuRecursive = async (menuId) => {
   };
 };
 
+// exports.getMenu = async (req, res, next) => {
+//   try {
+//     const rootMenus = await Menu.find({ parentId: null }).exec();
+    
+//     const menus = await Promise.all(rootMenus.map(menu => getMenuRecursive(menu._id)));
+
+//     res.status(200).json({
+//       status: 200,
+//       message: 'Get menu success',
+//       data: menus,
+//     });
+//   } catch (error) {
+//     if (!error.statusCode) {
+//       error.statusCode = 500;
+//     }
+//     next(error);
+//   }
+// };
 exports.getMenu = async (req, res, next) => {
   try {
-    const rootMenus = await Menu.find({ parentId: null }).exec();
-    
-    const menus = await Promise.all(rootMenus.map(menu => getMenuRecursive(menu._id)));
+    const user = await User.findById(req.userId);
+    // /const roleId = user.role; 
+    const role = await Role.findById(user.role);
+    if (!role) {
+      const error = new Error('Cannot find role');
+      error.statusCode = 404;
+      throw error;
+    }
+
+    const rootMenus = await Menu.find({ parentId: null,  _id: { $in: role.roleMenu } }).exec();
+    console.log(rootMenus.length)
+    const menus = await Promise.all(rootMenus.map(menu => getMenuRecursive(menu._id, role.roleMenu)));
 
     res.status(200).json({
       status: 200,
@@ -36,7 +66,7 @@ exports.getMenu = async (req, res, next) => {
 };
 
 exports.postAddMenu = async (req, res, next) => {
-  const { type, parentId, title, component, name, icon, path, isLink, isHide, isFull } = req.body;
+  const { type, parentId, title, component, name, icon, path, isLink, isHide, isFull, isAffix } = req.body;
   try {
     const newParentId = parentId === -1 ? null : parentId; 
 
@@ -49,9 +79,10 @@ exports.postAddMenu = async (req, res, next) => {
       meta: {
         icon: icon,
         title: title, 
-        isLink: isLink || "",
+        isLink: isLink,
         isHide: isHide,
         isFull: isFull,
+        isAffix: isAffix
       }
     })
 
@@ -161,7 +192,7 @@ exports.getMenuItemDetail = async (req, res, next) => {
 }
 
 exports.putEditMenu = async (req, res, next) => {
-  const { id, type, parentId, title, component, name, icon, path, isLink, isHide, isFull }= req.body;
+  const { id, type, parentId, title, component, name, icon, path, isLink, isHide, isFull, isAffix }= req.body;
   console.log(req.body)
   try {
     const menu = await Menu.findById(id);
@@ -182,7 +213,8 @@ exports.putEditMenu = async (req, res, next) => {
     menu.meta.title = title;
     menu.meta.isLink = isLink;
     menu.meta.isHide = isHide;
-
+    menu.meta.isFull = isFull;
+    menu.meta.isAffix = isAffix;
     await menu.save();
 
     // If `parentId` has changed, update old parent menu and new parent menu

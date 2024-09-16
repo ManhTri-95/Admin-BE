@@ -13,6 +13,8 @@ exports.getUserList = async (req, res, next) => {
   try {
     const users = await User.find()
       .skip(skip)
+      .select('avatar firstName lastName email phone position status role createdAt lastLoginAt')
+      .populate('role', 'name')
       .limit(limit)
       .exec()
     
@@ -111,7 +113,7 @@ exports.postDeleteUser = async (req, res, next) => {
 }
 
 exports.postAddUser = async (req, res, next) => {
-  const { firstName, lastName, email, phone, status, newPassword, avatar } = req.body;
+  const { firstName, lastName, email, phone, status, newPassword, avatar, role } = req.body;
   try {
     const hashedPw = await bcrypt.hash(newPassword, 12);
 
@@ -124,6 +126,7 @@ exports.postAddUser = async (req, res, next) => {
       phone: phone,
       position: '',
       password: hashedPw,
+      role: role,
     });
 
     await user.save();
@@ -143,7 +146,9 @@ exports.postAddUser = async (req, res, next) => {
 exports.getUserDetail = async (req, res, next) => {
   const userId = req.query.id;
   try {
-    const user = await User.findById(userId);
+    const user = await User.findById(userId)
+      .select('avatar firstName lastName email phone position status role')
+      .populate('role', 'name value');
     if (!user) {
       const error = new Error('Cannot find user');
       error.statusCode = 404;
@@ -166,7 +171,7 @@ exports.getUserDetail = async (req, res, next) => {
 }
 
 exports.putEditUser = async (req, res, next) => {
-  const { id, firstName, lastName, email, phone, status, avatar, oldAvatar } = req.body;
+  const { id, firstName, lastName, email, phone, status, avatar, oldAvatar, role } = req.body;
   
   console.log(req.body)
   try {
@@ -189,6 +194,7 @@ exports.putEditUser = async (req, res, next) => {
     user.phone = phone;
     user.status = status;
     user.avatar = avatar;
+    user.role = role;
 
     await user.save();
     

@@ -57,9 +57,14 @@ const userSchema = new Schema({
     default: 0
   },
   
-  roles: {
-    type: [RoleSchema],
-    default: [{ role: 'admin'}]
+  // roles: {
+  //   type: [RoleSchema],
+  //   default: [{ role: 'admin'}]
+  // },
+  role: {
+    type: Schema.Types.ObjectId,
+    ref: 'Role',
+    required: true,
   },
 
   createdAt: {

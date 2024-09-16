@@ -10,6 +10,7 @@ const menuRoutes = require('./routes/menu');
 const userRoutes = require('./routes/user');
 const uploadRoutes = require('./routes/uploads/uploadRoutes');
 const errorMiddleware = require('./middleware/errorMiddleware');
+const roleRoutes = require('./routes/role');
 
 const Menu = require('./models/menu');
 
@@ -43,6 +44,7 @@ app.use('/auth', authRoutes);
 app.use('/menu', menuRoutes);
 app.use('/user', userRoutes);
 app.use('/uploads', uploadRoutes);
+app.use('/role', roleRoutes);
 app.use(errorMiddleware);
 
 mongoose
