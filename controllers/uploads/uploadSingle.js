@@ -2,7 +2,6 @@ const DOMAIN = process.env.DOMAIN;
 
 module.exports = {
   async importSingle (req, res) {
-    console.log(req)
     try {
       if (!req.file) {
         return res.status(400).json({ message: "Please upload a file!" });

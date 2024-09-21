@@ -107,7 +107,6 @@ exports.postAddMenu = async (req, res, next) => {
 
 exports.postDeleteMenu = async (req, res, next) => {
   const idsToDelete = req.body || [];
-  console.log(idsToDelete)
   try {
     if(!Array.isArray(idsToDelete) || idsToDelete.length === 0) {
       const error = new Error('Invalid user ID');
@@ -186,7 +185,6 @@ exports.getMenuItemDetail = async (req, res, next) => {
 
 exports.putEditMenu = async (req, res, next) => {
   const { id, type, parentId, title, component, name, icon, path, isLink, isHide, isFull, isAffix, isKeepAlive }= req.body;
-  console.log(req.body)
   try {
     const menu = await Menu.findById(id);
     if(!menu) {

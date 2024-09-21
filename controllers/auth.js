@@ -88,7 +88,7 @@ exports.signup = async (req, res, next) => {
 exports.login = async (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
-
+  console.log(email)
   try {
     const user = await User.findOne({ email: email });
 
@@ -187,7 +187,6 @@ exports.verifyToken = (req, res, next) => {
       throw error;
     }
     const tokenData = tokenStore[token];
-    console.log(tokenData)
     if (!tokenData) {
       const error = new Error('Invalid or expired token');
       error.statusCode = 401;

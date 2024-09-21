@@ -173,7 +173,6 @@ exports.getUserDetail = async (req, res, next) => {
 exports.putEditUser = async (req, res, next) => {
   const { id, firstName, lastName, email, phone, status, avatar, oldAvatar, role } = req.body;
   
-  console.log(req.body)
   try {
     const user = await User.findById(id);
 

@@ -1,73 +1,54 @@
-require('dotenv').config();
 const express = require('express');
-const mongoose = require('mongoose');
-const path = require('path');
-
-const bodyParser = require('body-parser');
-
-const authRoutes = require('./routes/auth');
-const menuRoutes = require('./routes/menu');
-const userRoutes = require('./routes/user');
-const uploadRoutes = require('./routes/uploads/uploadRoutes');
-const errorMiddleware = require('./middleware/errorMiddleware');
-const roleRoutes = require('./routes/role');
-
-const Menu = require('./models/menu');
-
-const { PORT, MONGO_USER, MONGO_PASSWORD, MONGO_DEFAULT_DB } = require('./config/default');
-
+const helmet = require('helmet');
+const xss = require('xss-clean');
+const mongoSanitize = require('express-mongo-sanitize');
+const compression = require('compression');
+const cors = require('cors');
+const passport = require('passport');
+const { errorHandler } = require('./middleware/error');
+const httpStatus = require('http-status');
+const routes = require('./routes/v1')
+const ApiError = require('./utils/ApiError');
 
 const app = express();
 
-app.use(express.static(path.join(__dirname, 'public')));
+const corsOptions = {
+  origin: 'https://localhost:3100', // Only allow localhost:3100 access
+  credentials: true,
+};
 
-app.use(bodyParser.json());// application/json
+// set security HTTP headers
+app.use(helmet());
 
-const allowedOrigins = ['https://localhost:3100', 'https://matches-taupe.vercel.app'];
+// parse json request body
+app.use(express.json());
+
+// parse urlencoded request body
+app.use(express.urlencoded({ extended: true }));
+
+// sanitize request data
+app.use(xss());
+app.use(mongoSanitize());
+
+// gzip compression
+app.use(compression());
+
+// enable cors
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
+
+// jwt authentication
+app.use(passport.initialize());
+//passport.use('jwt')
+
+// v1 api routes
+app.use('/v1', routes);
+// Send back a 404 error for any unknown API request
 app.use((req, res, next) => {
-  const origin = req.headers.origin;
-
-  // Check if the request origin is in the list of allowed origins
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin); // Set the allowed origin dynamically
-  }
-  //res.setHeader('Access-Control-Allow-Origin', 'https://localhost:3100,https://matches-taupe.vercel.app'),
-  res.setHeader('Access-Control-Allow-Credentials', 'true'),
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTION');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  next();
+  next(new ApiError(httpStatus.NOT_FOUND, 'Not found'));
 });
 
+// handle error
+app.use(errorHandler);
 
-
-app.use('/auth', authRoutes);
-app.use('/menu', menuRoutes);
-app.use('/user', userRoutes);
-app.use('/uploads', uploadRoutes);
-app.use('/role', roleRoutes);
-app.use(errorMiddleware);
-
-mongoose
-  .connect(
-    `mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@cluster0.tei1gv0.mongodb.net/${MONGO_DEFAULT_DB}`
-  )
-  .then(result => {
-    app.listen(PORT);
-  })
-  .catch(err => console.log(err));
-
-  // async function listAllDocuments() {
-  //   try {
-  //     const result = await Menu.updateMany(
-  //       {}, // Tìm tất cả tài liệu
-  //       { $set: { 'meta.isAffix': false } } // Đặt giá trị mặc định cho isKeepAlive trong meta
-  //     );
-  //   } catch (err) {
-  //     console.error('Error fetching documents:', err);
-  //   }
-  // }
-  
-
-  
-
-  
+module.exports = app;
