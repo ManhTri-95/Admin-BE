@@ -29,7 +29,7 @@ const metaSchema = new Schema({
     default: false
   },
   isKeepAlive: {
-    type: String,
+    type: Boolean,
     default: false
   }
 }, { _id: false });

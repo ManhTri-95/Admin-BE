@@ -49,7 +49,7 @@ app.use(errorMiddleware);
 
 mongoose
   .connect(
-    `mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@cluster0.tei1gv0.mongodb.net/${MONGO_DEFAULT_DB}?retryWrites=true&w=majority&appName=Cluster0`
+    `mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@cluster0.tei1gv0.mongodb.net/${MONGO_DEFAULT_DB}`
   )
   .then(result => {
     app.listen(PORT);

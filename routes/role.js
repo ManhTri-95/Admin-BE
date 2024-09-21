@@ -9,4 +9,8 @@ router.post('/add', isAuth, roleController.postAddRole);
 
 router.get('/list', isAuth, roleController.getRoleList);
 
+router.put('/edit', isAuth, roleController.putEditRole);
+
+router.get('/detail', isAuth, roleController.getDetailRole);
+
 module.exports = router;

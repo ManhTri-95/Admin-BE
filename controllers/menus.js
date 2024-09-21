@@ -11,36 +11,25 @@ const getMenuRecursive = async (menuId, roleMenu) => {
   
   if (!menu) return null;
 
+  // Check if the current menu ID is in roleMenu
+  const hasAccess = roleMenu.includes(menuId);
+
+  // Recursively get children and determine their access status
   const children = await Promise.all(menu.children.map(childId => getMenuRecursive(childId, roleMenu)));
-  
+
+  // Determine if any child has access
+  const childHasAccess = children.some(child => child && child.hasAccess);
+
   return {
     ...menu.toObject(),
+    hasAccess: hasAccess || childHasAccess,
     children: children.filter(child => child !== null),
   };
 };
 
-// exports.getMenu = async (req, res, next) => {
-//   try {
-//     const rootMenus = await Menu.find({ parentId: null }).exec();
-    
-//     const menus = await Promise.all(rootMenus.map(menu => getMenuRecursive(menu._id)));
-
-//     res.status(200).json({
-//       status: 200,
-//       message: 'Get menu success',
-//       data: menus,
-//     });
-//   } catch (error) {
-//     if (!error.statusCode) {
-//       error.statusCode = 500;
-//     }
-//     next(error);
-//   }
-// };
 exports.getMenu = async (req, res, next) => {
   try {
     const user = await User.findById(req.userId);
-    // /const roleId = user.role; 
     const role = await Role.findById(user.role);
     if (!role) {
       const error = new Error('Cannot find role');
@@ -48,8 +37,10 @@ exports.getMenu = async (req, res, next) => {
       throw error;
     }
 
-    const rootMenus = await Menu.find({ parentId: null,  _id: { $in: role.roleMenu } }).exec();
-    console.log(rootMenus.length)
+    // Get root menus based on roleMenu
+    const rootMenus = await Menu.find({ parentId: null }).exec();
+    
+    // Process each root menu to include access information
     const menus = await Promise.all(rootMenus.map(menu => getMenuRecursive(menu._id, role.roleMenu)));
 
     res.status(200).json({
@@ -65,8 +56,9 @@ exports.getMenu = async (req, res, next) => {
   }
 };
 
+
 exports.postAddMenu = async (req, res, next) => {
-  const { type, parentId, title, component, name, icon, path, isLink, isHide, isFull, isAffix } = req.body;
+  const { type, parentId, title, component, name, icon, path, isLink, isHide, isFull, isAffix, isKeepAlive } = req.body;
   try {
     const newParentId = parentId === -1 ? null : parentId; 
 
@@ -82,7 +74,8 @@ exports.postAddMenu = async (req, res, next) => {
         isLink: isLink,
         isHide: isHide,
         isFull: isFull,
-        isAffix: isAffix
+        isAffix: isAffix,
+        isKeepAlive: isKeepAlive
       }
     })
 
@@ -192,7 +185,7 @@ exports.getMenuItemDetail = async (req, res, next) => {
 }
 
 exports.putEditMenu = async (req, res, next) => {
-  const { id, type, parentId, title, component, name, icon, path, isLink, isHide, isFull, isAffix }= req.body;
+  const { id, type, parentId, title, component, name, icon, path, isLink, isHide, isFull, isAffix, isKeepAlive }= req.body;
   console.log(req.body)
   try {
     const menu = await Menu.findById(id);
@@ -215,6 +208,7 @@ exports.putEditMenu = async (req, res, next) => {
     menu.meta.isHide = isHide;
     menu.meta.isFull = isFull;
     menu.meta.isAffix = isAffix;
+    menu.meta.isKeepAlive = isKeepAlive
     await menu.save();
 
     // If `parentId` has changed, update old parent menu and new parent menu
