@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 // const nodemailer = require('nodemailer');
 // const Mailjet = require('nodemailer-mailjet-transport');
 const { v4: uuidv4 } = require('uuid');
-const User = require('../models/user');
+const User = require('../models/user.bak');
 const { sendEmail } = require('../services/emailService');
 const { generateToken, generateVerificationToken, tokenStore } = require('../services/tokenService');
 
@@ -88,7 +88,7 @@ exports.signup = async (req, res, next) => {
 exports.login = async (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
-  console.log(email)
+
   try {
     const user = await User.findOne({ email: email });
 

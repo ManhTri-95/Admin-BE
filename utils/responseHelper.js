@@ -6,7 +6,6 @@ const createResponse = (status, message, data = null) => {
   }
 }
 
-
 module.exports = {
   createResponse
 }

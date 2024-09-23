@@ -15,3 +15,5 @@ const pick = (object, keys) => {
   console.log(result)
   return result;
 }
+
+module.exports = pick;

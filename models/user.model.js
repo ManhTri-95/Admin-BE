@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 
 const userSchema = mongoose.Schema(
   {
@@ -40,11 +41,11 @@ const userSchema = mongoose.Schema(
       required: true,
       default: false
     },
-    role: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Role',
-      required: true,
-    },
+    // role: {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: 'Role',
+    //   required: true,
+    // },
     lastLoginAt: {
       type: Date,
       default: Date.now
@@ -58,6 +59,16 @@ const userSchema = mongoose.Schema(
 userSchema.methods.updateLastLogin = function () {
   return this.updateOne({ lastLoginAt: new Date() });
 };
+
+/**
+ * Check if password matches the user's password
+ * @param {string} password
+ * @returns {Promise<boolean>}
+ */
+userSchema.methods.isPasswordMatch = async function (password) {
+  const user = this;
+  return bcrypt.compare(password, user.password)
+}
 
 module.exports = mongoose.model('User', userSchema);
 

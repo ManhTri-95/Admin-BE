@@ -8,6 +8,7 @@ const passport = require('passport');
 const { errorHandler } = require('./middleware/error');
 const httpStatus = require('http-status');
 const routes = require('./routes/v1')
+const { jwtStrategy } = require('./config/passport');
 const ApiError = require('./utils/ApiError');
 
 const app = express();
@@ -39,7 +40,7 @@ app.options('*', cors(corsOptions));
 
 // jwt authentication
 app.use(passport.initialize());
-//passport.use('jwt')
+passport.use('jwt', jwtStrategy);
 
 // v1 api routes
 app.use('/v1', routes);
