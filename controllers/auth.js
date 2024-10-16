@@ -217,7 +217,6 @@ exports.resetPassword = async (req, res, next) => {
     }
 
     const newPassword = uuid.replace(/-/g, '').substring(0, 10);
-    console.log(newPassword);
     const emailDetails = {
       fromEmail: 'bootrancntt@gmail.com',
       fromName: 'Manh Tri',

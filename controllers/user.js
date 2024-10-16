@@ -139,7 +139,7 @@ exports.postAddUser = async (req, res, next) => {
     if(!error.statusCode) {
       error.statusCode = 500;
     }
-    next(error);tri95
+    next(error);
   }
 }
 

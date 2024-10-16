@@ -13,7 +13,6 @@ const validate = (schema) => (req, res, next) => {
     const errorMessage = error.details.map((details) => details.message).join(', ');
     return next(new ApiError(httpStatus.BAD_REQUEST, errorMessage));
   }
-  console.log(schema);
   Object.assign(req, value);
   return next();
 }

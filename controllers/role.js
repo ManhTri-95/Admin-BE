@@ -68,7 +68,6 @@ exports.getDetailRole = async (req, res, next) => {
 }
 
 exports.putEditRole = async (req, res, next) => {
-  console.log(req.body);
   const { id, roleName, roleValue, roleRemark, roleMenu } = req.body;
   try {
     const role = await Role.findById(id);

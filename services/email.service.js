@@ -18,7 +18,8 @@ const sendEmail = async ({ fromEmail, fromName, toEmail, toName, subject, text, 
     const response = await mailjet
       .post('send', { 'version': 'v3.1' })
       .request({
-        //SandboxMode: true,
+       
+        SandboxMode: true, // remove with prod
         Messages: [
           {
             From: {
@@ -37,7 +38,6 @@ const sendEmail = async ({ fromEmail, fromName, toEmail, toName, subject, text, 
           }
         ]
       });
-    console.log(response.body)
     return response.body;
   } catch (error) {
     throw error;
@@ -64,6 +64,35 @@ const sendSignupSuccessUser = async (user, password) => {
   await sendEmail(emailDetails);
 }
 
-module.exports = {
-  sendSignupSuccessUser
+const sendResetPasswordUser = async (user, resetToken, domain) => {
+  const emailDetails = {
+    fromEmail: config.email.from,
+    fromName: 'Manh Tri',
+    toEmail: user.email,
+    toName: user.firstName + ' ' + user.lastName,
+    subject: 'Reset passord', 
+    text: `Hello ${user.firstName + ' ' + user.lastName},
+
+    You have requested to reset your password. Please click on the link below to reset your password:
+    
+    ${domain}/reset-password?token=${resetToken}
+    
+    If you did not request this, please ignore this email.
+
+    Best regards,
+    Manh Tri`, // Nội dung email dạng văn bản thuần (text)
+    html: `<h3>Hello ${user.firstName + ' ' + user.lastName},</h3>
+          <p>You have requested to reset your password. Please click the link below to reset your password:</p>
+          <p><a href="${domain}/reset-password?token=${resetToken}">Reset Password</a></p>
+          <p>If you did not request this, please ignore this email.</p>
+          <p>Best regards,<br>Manh Tri</p>`
+  }
+
+  await sendEmail(emailDetails);
 }
+
+module.exports = {
+  sendSignupSuccessUser,
+  sendResetPasswordUser
+}
+

@@ -8,12 +8,16 @@ const envVarsSchema = Joi.object()
   .keys({
     NODE_ENV: Joi.string().valid('production', 'development', 'test').required(),
     PORT: Joi.number().default(3001),
+    DOMAIN: Joi.string().uri().default('http://localhost:3001'),
     MONGODB_URL: Joi.string().description('Mongo DB url'),
     JWT_SECRET: Joi.string().description('WT secret key'),
     JWT_ACCESS_EXPIRATION_MINUTES: Joi.number().default(30),
     JWT_SIGNUP_SUCCESS_EXPIRATION_MINUTES: Joi.number()
       .default(10)
       .description('minutes after which signup success token expires'),
+    JWT_RESET_PASSWORD_EXPIRATION_MINUTES: Joi.number()
+      .default(10)
+      .description('minutes after which reset password token expires'),
     API_KEY_MAILJET: Joi.number().description('API key mailjet'),
     API_SECRET_MAILJET: Joi.number().description('API secret mailjet'),
     EMAIL_FROM: Joi.string().description('the from field in the emails sent by the app'),
@@ -24,6 +28,7 @@ const envVarsSchema = Joi.object()
 module.exports = {
   env: envVars.NODE_ENV,
   port: envVars.PORT,
+  domain: envVars.DOMAIN,
   mongoose: {
     url : envVars.MONGODB_URL + (envVars.NODE_ENV === 'test' ? '-test' : ''),
   },
@@ -31,6 +36,7 @@ module.exports = {
     secret: envVars.MONGODB_URL,
     accessExpirationMinutes: envVars.JWT_ACCESS_EXPIRATION_MINUTES,
     signupSuccessExpirationMinutes: envVars.JWT_SIGNUP_SUCCESS_EXPIRATION_MINUTES,
+    resetPasswordExpirationMinutes: envVars.JWT_RESET_PASSWORD_EXPIRATION_MINUTES
   },
   email: { 
     mailjet: {

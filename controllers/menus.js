@@ -56,7 +56,6 @@ exports.getMenu = async (req, res, next) => {
   }
 };
 
-
 exports.postAddMenu = async (req, res, next) => {
   const { type, parentId, title, component, name, icon, path, isLink, isHide, isFull, isAffix, isKeepAlive } = req.body;
   try {

@@ -12,7 +12,6 @@ const pick = (object, keys) => {
       result[key] = object[key];
     }
   }
-  console.log(result)
   return result;
 }
 

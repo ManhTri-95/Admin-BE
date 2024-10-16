@@ -14,7 +14,7 @@ const ApiError = require('./utils/ApiError');
 const app = express();
 
 const corsOptions = {
-  origin: 'https://localhost:3100', // Only allow localhost:3100 access
+  origin: ['https://localhost:3100', 'https://localhost:3101'], // Only allow localhost:3100 access
   credentials: true,
 };
 

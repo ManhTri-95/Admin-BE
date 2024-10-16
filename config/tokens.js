@@ -1,5 +1,7 @@
 const tokenTypes = {
-   ACCESS: 'access'
+   ACCESS: 'access',
+   SIGNUP_SUCCESS: 'signupSuccess',
+   RESET_PASSWORD: 'resetPassword',
 }
 
 module.exports = {
