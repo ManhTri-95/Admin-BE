@@ -42,7 +42,6 @@ const singupUser = async(email, firstName, lastName, phone) => {
   }
 
   const password = crypto.randomBytes(5).toString('hex');
-  console.log(password);
   const hashedPw = await bcrypt.hash(password, 12);
   const newUser = new User({
     email: email,
@@ -99,13 +98,38 @@ const getUserInfo = async (id) => {
  */
 const verifySetNewPassword = async (verifySetPwToken) => {
   try {
+    const verifyEmailSetNewPassword = await tokenService.verifyToken(verifySetPwToken, tokenTypes.RESET_PASSWORD);
+    const user = await userService.getUserById(verifyEmailSetNewPassword.user);
+    if (!user) {
+      throw new Error()
+    } 
+    //await Token.deleteMany({ user: user.id, type: tokenTypes.RESET_PASSWORD });
 
   } catch (error) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Set newPassword verification failed');
   }
 }
 
-
+/**
+ * Reset passord
+ * @param {string} resetPasswordToken
+ * @param {string} newPassword
+ * @return {Promise}
+ */
+const resetPassword = async (resetPasswordToken, newPassword) => {
+  try {
+    const resetPasswordTokenDoc = await tokenService.verifyToken(resetPasswordToken, tokenTypes.RESET_PASSWORD);
+    const user = await userService.getUserById(resetPasswordTokenDoc.user);
+    if (!user) {
+      throw new Error();
+    }
+    await userService.updateUserById(user.id, { password: newPassword });
+    await Token.deleteMany({ user: user.id, type: tokenTypes.RESET_PASSWORD });
+    //await verifySetNewPassword(resetPasswordToken);
+  } catch (error) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Password reset failed');
+  }
+}
 
 //verifyEmail('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NmYyZTE1Mzk0ZGNjMDk4MDlhNDJmYjciLCJpYXQiOjE3MjcxOTM0MjcsImV4cCI6MTcyNzE5NDAyNywidHlwZSI6InNpZ251cFN1Y2Nlc3MifQ.agpIRls95th62C6vh8YT8rQgQr4sVyEKtIsxBwzpOvE')
 
@@ -113,5 +137,7 @@ module.exports = {
   loginUserWithEmailAndPassword,
   singupUser,
   verifySignupSuccess,
-  getUserInfo
+  getUserInfo,
+  verifySetNewPassword,
+  resetPassword
 }

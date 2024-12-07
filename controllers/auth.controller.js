@@ -45,9 +45,14 @@ const postForgotPassword = catchAsync(async (req, res) => {
 });
 
 const postSetNewPassword = catchAsync(async (req, res) => {
-  console.log(req.body);
-  const { newPassword, confirmPassword } = req.body;
+  await authService.resetPassword(req.query.token, req.body.newPassword);
   const response = createResponse(200, 'NewPassord setup successful');
+  res.status(200).json(response);
+});
+
+const getVerifyTokenResetPassword = catchAsync(async (req, res) => {
+  await authService.verifySetNewPassword(req.query.token);
+  const response = createResponse(200, 'Verify token successful', { isValid: true });
   res.status(200).json(response);
 });
 
@@ -57,5 +62,6 @@ module.exports = {
   verifySignupSuccess,
   getUserInfo,
   postForgotPassword,
+  getVerifyTokenResetPassword,
   postSetNewPassword
 }
